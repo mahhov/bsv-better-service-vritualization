@@ -5,7 +5,7 @@
 
     let mode = modes.IGNORE;
     let recordings = {};
-    let replayHistory;
+    let replayHistory = {};
 
     exports.setModeIgnore = () => {
         mode = modes.IGNORE;
@@ -72,6 +72,9 @@
     };
 
     let replayPromise = (name, object, method) => {
+        if (!replayHistory[name])
+            replayHistory[name] = 0;
+
         object[method] = () => {
             let index = replayHistory[name]++;
             let recording = recordings[name][index];
