@@ -58,7 +58,7 @@
         let oldMethod = object[method];
 
         object[method] = function () {
-            let response = oldMethod(...arguments);
+            let response = oldMethod.call(this, ...arguments);
             let recordArguments = _.map(arguments, argument => {
                 return argument;
             });
