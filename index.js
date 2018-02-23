@@ -19,7 +19,7 @@
         mode = modes.REPLAY;
     };
 
-    exports.export = fileName => {
+    exports.export = () => {
         return recordings;
     };
 
@@ -34,6 +34,10 @@
         elem.setAttribute('download', fileName);
         elem.click();
         elem.remove();
+    };
+
+    exports.exportClipboard = () => {
+        copy(recordings);
     };
 
     exports.import = recordingsJson => {
