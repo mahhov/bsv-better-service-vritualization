@@ -23,7 +23,7 @@
         return recordings;
     };
 
-    exports.exportString = fileName => {
+    exports.exportString = () => {
         return JSON.stringify(recordings);
     };
 
@@ -40,14 +40,14 @@
         recordings = recordingsJson;
     };
 
-    exports.register = (name, object, method) => {
+    exports.registerPromise = (name, object, method) => {
         if (mode === modes.RECORD)
-            exports.record(name, object, method);
+            recordPromise(name, object, method);
         else if (mode === modes.REPLAY)
-            exports.replay(name, object, method);
+            replayPromise(name, object, method);
     };
 
-    exports.record = (name, object, method) => {
+    let recordPromise = (name, object, method) => {
         if (!recordings[name])
             recordings[name] = [];
 
@@ -67,7 +67,7 @@
         };
     };
 
-    exports.replay = (name, object, method) => {
+    let replayPromise = (name, object, method) => {
         object[method] = () => {
             let index = replayHistory[name]++;
             let recording = recordings[name][index];
@@ -75,5 +75,27 @@
         };
     };
 
+    exports.registerField = (name, object, field) => {
+        if (mode === modes.RECORD)
+            recordField(name, object, field);
+        else if (mode === modes.REPLAY)
+            replayField(name, object, field);
+    };
+
+    let recordField = (name, object, field) => {
+        if (!recordings[name])
+            recordings[name] = {};
+
+        recordings[name][field] = object[field];
+    };
+
+    let replayField = (name, object, field) => {
+        object[field] = recordings[name][field];
+    };
+
     window.bsv = exports;
 })();
+
+// todo
+// use module export
+// configure with url query param
