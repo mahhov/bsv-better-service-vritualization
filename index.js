@@ -63,7 +63,7 @@
                 return argument;
             });
             response.then(resolution => {
-                recordings[name].push({'arguments': recordArguments, 'resolution': resolution});
+                recordings[name].push({'arguments': recordArguments, 'resolution': resolution, 'resolved': true});
             }).catch(rejection => {
                 recordings[name].push({'arguments': recordArguments, 'rejection': rejection});
             });
@@ -79,7 +79,7 @@
             let index = replayHistory[name];
             replayHistory[name] < recordings[name].length - 1 && replayHistory[name]++;
             let recording = recordings[name][index];
-            return recording.resolution ? Promise.resolve(recording.resolution) : Promise.reject(recording.rejection);
+            return recording.resolved ? Promise.resolve(recording.resolution) : Promise.reject(recording.rejection);
         };
     };
 
