@@ -76,7 +76,8 @@
             replayHistory[name] = 0;
 
         object[method] = () => {
-            let index = replayHistory[name]++;
+            let index = replayHistory[name];
+            replayHistory[name] < recordings[name].length - 1 && replayHistory[name]++;
             let recording = recordings[name][index];
             return recording.resolution ? Promise.resolve(recording.resolution) : Promise.reject(recording.rejection);
         };
@@ -105,4 +106,5 @@
 
 // todo
 // use module export
-// configure with url query param
+// why is "surveyRepository.hasPendingCaMileageSurvey false
+// json in seperate file
