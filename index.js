@@ -103,8 +103,3 @@
 
     window.bsv = exports;
 })();
-
-// todo
-// use module export
-// why is "surveyRepository.hasPendingCaMileageSurvey false
-// json in seperate file
