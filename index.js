@@ -4,6 +4,7 @@
     let modes = {'IGNORE': 0, 'RECORD': 1, 'REPLAY': 2};
 
     let mode = modes.IGNORE;
+    let replayDelay;
     let recordings = {};
     let replayHistory = {};
 
@@ -15,8 +16,9 @@
         mode = modes.RECORD;
     };
 
-    exports.setModeReplay = () => {
+    exports.setModeReplay = (delay) => {
         mode = modes.REPLAY;
+        replayDelay = delay;
     };
 
     exports.export = exports.exportClipboard = () => {
@@ -79,7 +81,22 @@
             let index = replayHistory[name];
             replayHistory[name] < recordings[name].length - 1 && replayHistory[name]++;
             let recording = recordings[name][index];
-            return recording.resolved ? Promise.resolve(recording.resolution) : Promise.reject(recording.rejection);
+            if (!recording) {
+                console.log('something went wrong', name);
+                console.trace(name);
+                return Promise.reject();
+            }
+
+            if (!replayDelay)
+                return recording.resolved ? Promise.resolve(recording.resolution) : Promise.reject(recording.rejection);
+            else
+                return recording.resolved ?
+                    new Promise(resolve => {
+                        setTimeout(resolve, replayDelay, recording.resolution);
+                    }) :
+                    new Promise((resolve, reject) => {
+                        setTimeout(reject, replayDelay, recording.rejection);
+                    });
         };
     };
 
@@ -103,3 +120,6 @@
 
     window.bsv = exports;
 })();
+
+// todo error handling
+// replay based on arguments
