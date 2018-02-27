@@ -10,8 +10,10 @@ Record and replay fields and methods.
 
 // set to either record or replay mode
 if (mockData) {
-    bsv.setModeReplay(replayDelay);
+    bsv.setModeReplay();
     bsv.import(mockData);
+    bsv.setReplayDelay(500);
+    bsv.setCustomReplayDelay('repository1.carData', 2500)
 } else {
     bsv.setModeRecord();
 }
@@ -35,30 +37,35 @@ bsv.registerPromise('repository2.elevatorData', repository2, 'getElevatorData');
 
 `bsv.setModeRecord()` will record all subsequent registers.
 
-`bsv.setModeReplay(delay)` will replay all subsequent registers. Replays methods will be resolved or rejected after `delay` milliseconds.
+`bsv.setModeReplay()` will replay all subsequent registers.
+
+## Delay
+
+`setReplayDelay(delay)` sets default delay for replaying methods. 
+
+`setCustomReplayDelay(name, delay)` sets delay for replaying individual method. 
 
 ## Exporting
 
-`bsv.export()` (and alias `bsv.exportClipboard()`) copy to clipboard the recordings thus far.
+`export()` (and alias `exportClipboard()`) copy to clipboard the recordings thus far.
 
-`bsv.exportObject()` will return a javascript object of the recordings thus far.
+`exportObject()` will return a javascript object of the recordings thus far.
 
-`bsv.exportString()` will return a string representing the javascript object of the recordings thus far.
+`exportString()` will return a string representing the javascript object of the recordings thus far.
 
-`bsv.exportFile()` will download a file containing a json representation of the recordings thus far.
+`exportFile()` will download a file containing a json representation of the recordings thus far.
 
 ## Importing
 
-`bsv.import(recordingsJson)` takes in a javascript object such as one that was exported, and uses this object for replays.
-
+`import(recordingsJson)` takes in a javascript object such as one that was exported, and uses this object for replays.
 
 ## Recording Fields
 
-Current field values at the time `bsv.registerField` is invoked are recorded.
+Current field values at the time `registerField` is invoked are recorded.
 
 ## Replaying Fields
 
-Field values are assigned at the time `bsv.registerField` is invoked.
+Field values are assigned at the time `registerField` is invoked.
 
 ## Recording Methods
 

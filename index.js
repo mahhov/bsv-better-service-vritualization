@@ -5,6 +5,7 @@
 
     let mode = modes.IGNORE;
     let replayDelay;
+    let customReplayDelays = {};
     let recordings = {};
     let replayHistory = {};
 
@@ -16,9 +17,16 @@
         mode = modes.RECORD;
     };
 
-    exports.setModeReplay = (delay) => {
+    exports.setModeReplay = () => {
         mode = modes.REPLAY;
+    };
+
+    exports.setReplayDelay = delay => {
         replayDelay = delay;
+    };
+
+    exports.setCustomReplayDelay = (name, delay) => {
+        customReplayDelays[name] = delay;
     };
 
     exports.export = exports.exportClipboard = () => {
@@ -95,16 +103,18 @@
                 warning404(name, index);
                 return Promise.reject();
             }
+            
+            let delay = customReplayDelays[name] || replayDelay;
 
-            if (!replayDelay)
+            if (!delay)
                 return recording.resolved ? Promise.resolve(recording.resolution) : Promise.reject(recording.rejection);
             else
                 return recording.resolved ?
                     new Promise(resolve => {
-                        setTimeout(resolve, replayDelay, recording.resolution);
+                        setTimeout(resolve, delay, recording.resolution);
                     }) :
                     new Promise((resolve, reject) => {
-                        setTimeout(reject, replayDelay, recording.rejection);
+                        setTimeout(reject, delay, recording.rejection);
                     });
         };
     };
