@@ -74,16 +74,25 @@
     };
 
     let replayPromise = (name, object, method) => {
+        if (!object) {
+            warningNull(name);
+            return;
+        }
+
         if (!replayHistory[name])
             replayHistory[name] = 0;
 
         object[method] = () => {
+            if (!recordings || !recordings[name]) {
+                warning404(name);
+                return Promise.reject();
+            }
+
             let index = replayHistory[name];
             replayHistory[name] < recordings[name].length - 1 && replayHistory[name]++;
             let recording = recordings[name][index];
             if (!recording) {
-                console.log('something went wrong', name);
-                console.trace(name);
+                warning404(name, index);
                 return Promise.reject();
             }
 
@@ -115,11 +124,27 @@
     };
 
     let replayField = (name, object, field) => {
-        object[field] = recordings[name][field];
+        if (!object)
+            warningNull(name);
+        else if (!recordings || !recordings[name])
+            warning404(name);
+        else
+            object[field] = recordings[name][field];
+    };
+
+    let warningNull = name => {
+        warning('null object', name);
+    };
+
+    let warning404 = (name, details) => {
+        warning('no recordings found for', name, details);
+    };
+
+    let warning = (message, name, details) => {
+        console.error(message, name, details ? details : '');
     };
 
     window.bsv = exports;
 })();
 
-// todo error handling
-// replay based on arguments
+// todo replay based on arguments
