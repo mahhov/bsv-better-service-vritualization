@@ -1,12 +1,12 @@
 {
   "name": "bsv-better-service-virtualization",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
   "main": "index.js",
   "author": "mahhov",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "not set yet"
+    "url": "https://github.com/mahhov/bsv-better-service-vritualization"
   }
 }
