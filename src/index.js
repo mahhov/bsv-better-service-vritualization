@@ -105,6 +105,7 @@
             }
 
             let delay = customReplayDelays[name] || replayDelay;
+            console.log('invoking', name, 'with', delay, 'delay');
 
             if (!delay)
                 return recording.resolved ? Promise.resolve(recording.resolution) : Promise.reject(recording.rejection);
