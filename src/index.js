@@ -1,5 +1,5 @@
 (function () {
-    let exports = {};
+    let bsv = {};
 
     let modes = {'IGNORE': 0, 'RECORD': 1, 'REPLAY': 2};
 
@@ -9,39 +9,39 @@
     let recordings = {};
     let replayHistory = {};
 
-    exports.setModeIgnore = () => {
+    bsv.setModeIgnore = () => {
         mode = modes.IGNORE;
     };
 
-    exports.setModeRecord = () => {
+    bsv.setModeRecord = () => {
         mode = modes.RECORD;
     };
 
-    exports.setModeReplay = () => {
+    bsv.setModeReplay = () => {
         mode = modes.REPLAY;
     };
 
-    exports.setReplayDelay = delay => {
+    bsv.setReplayDelay = delay => {
         replayDelay = delay;
     };
 
-    exports.setCustomReplayDelay = (name, delay) => {
+    bsv.setCustomReplayDelay = (name, delay) => {
         customReplayDelays[name] = delay;
     };
 
-    exports.export = exports.exportClipboard = () => {
+    bsv.export = bsv.exportClipboard = () => {
         copy(recordings);
     };
 
-    exports.exportObject = () => {
+    bsv.exportObject = () => {
         return recordings;
     };
 
-    exports.exportString = () => {
+    bsv.exportString = () => {
         return JSON.stringify(recordings);
     };
 
-    exports.exportFile = fileName => {
+    bsv.exportFile = fileName => {
         let dataString = 'data:text/json,' + JSON.stringify(recordings);
         let elem = document.createElement('a');
         elem.setAttribute('href', dataString);
@@ -50,11 +50,11 @@
         elem.remove();
     };
 
-    exports.import = recordingsJson => {
+    bsv.import = recordingsJson => {
         recordings = recordingsJson;
     };
 
-    exports.registerPromise = (name, object, method) => {
+    bsv.registerPromise = (name, object, method) => {
         if (mode === modes.RECORD)
             recordPromise(name, object, method);
         else if (mode === modes.REPLAY)
@@ -103,7 +103,7 @@
                 warning404(name, index);
                 return Promise.reject();
             }
-            
+
             let delay = customReplayDelays[name] || replayDelay;
 
             if (!delay)
@@ -119,7 +119,7 @@
         };
     };
 
-    exports.registerField = (name, object, field) => {
+    bsv.registerField = (name, object, field) => {
         if (mode === modes.RECORD)
             recordField(name, object, field);
         else if (mode === modes.REPLAY)
@@ -154,7 +154,9 @@
         console.error(message, name, details ? details : '');
     };
 
-    window.bsv = exports;
+    window.bsv = exports = bsv;
 })();
 
-// todo replay based on arguments
+// todo
+// replay based on arguments
+// replace window.bsv = exports with babel
