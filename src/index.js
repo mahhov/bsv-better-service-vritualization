@@ -33,16 +33,12 @@
         copy(recordings);
     };
 
-    bsv.exportObject = () => {
-        return recordings;
-    };
+    bsv.exportObject = () => recordings;
 
-    bsv.exportString = () => {
-        return JSON.stringify(recordings);
-    };
+    bsv.exportString = () => JSON.stringify(recordings);
 
     bsv.exportFile = fileName => {
-        let dataString = 'data:text/json,' + JSON.stringify(recordings);
+        let dataString = `data:text/json,${JSON.stringify(recordings)}`;
         let elem = document.createElement('a');
         elem.setAttribute('href', dataString);
         elem.setAttribute('download', fileName);
@@ -69,9 +65,7 @@
 
         object[method] = function () {
             let response = oldMethod.call(this, ...arguments);
-            let recordArguments = _.map(arguments, argument => {
-                return argument;
-            });
+            let recordArguments = _.map(arguments, argument => argument);
             response.then(resolution => {
                 recordings[name].push({'arguments': recordArguments, 'resolution': resolution, 'resolved': true});
             }).catch(rejection => {
