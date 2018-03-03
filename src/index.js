@@ -149,7 +149,7 @@
         console.error(message, name, details ? details : '');
     };
 
-    window.bsv = exports = bsv;
+    window.bsv = bsv;
 })();
 
 // todo
