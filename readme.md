@@ -33,11 +33,25 @@ bsv.registerPromise('repository2.elevatorData', repository2, 'getElevatorData');
 
 ## Modes
 
-`bsv.setModeIgnore()` will ignore all subsequent registers.
+`bsv.setModeIgnore()`
 
-`bsv.setModeRecord()` will record all subsequent registers.
+Registered fields will be neither modified nor recorded. Registered methods will go through unmodified and unrecorded.
 
-`bsv.setModeReplay()` will replay all subsequent registers.
+`bsv.setModeRecord()` 
+
+Registered fields have their values recorded. Registered methods will have their resolution or rejection recorded.
+
+`bsv.setModeReplay()`
+
+Registered fields will have their values assigned per imported values. Registered methods will resolve or reject per imported records.
+
+Notes:
+
+1. Once a `setMode...` method is invoked, it should not be reset.
+
+2. Until a mode is set, no action will be taken with `registerField` invocations. See note for _Fields_ section.
+
+3. Until a mode is set, promises returned by registered methods will be unresolved and unrejected. See note for _Methods_ section.
 
 ## Delay
 
@@ -59,18 +73,22 @@ bsv.registerPromise('repository2.elevatorData', repository2, 'getElevatorData');
 
 `import(recordingsJson)` takes in a javascript object such as one that was exported, and uses this object for replays.
 
-## Recording Fields
+## Fields
 
-Current field values at the time `registerField` is invoked are recorded.
+`registerField(name, object, field)`
 
-## Replaying Fields
+Value of `object.field` is recorded or assigned by key `name`.
 
-Field values are assigned at the time `registerField` is invoked.
+Note, for recording, value of the field at the time of invoking `registerField` will be recorded, unless mode is not yet set, in which case, value at the time mode is set will be recorded.
 
-## Recording Methods
+Note, for replaying, value will be assigned at the time of invoking `registerField`, unless mode is not yet set, in which case, value will be assigned when mode is set. 
 
-Every time the method is invoked, the resolved or rejected promise is recorded.
+## Methods
 
-## Replaying Methods
+`registerPromise(name, object, methodName)`
 
-Each time the method is invoked, a recorded promise resolution or rejection is replayed. If `n` records exist, record `1` will be returned  for first invocation, then record `2`, ... record `n`. For invocations after the `n'`th invocation, record `n` will be returned.
+For record mode, every time the method is invoked, the resolved or rejected promise is recorded.
+
+For replay mode, each time the method is invoked, a recorded promise resolution or rejection is replayed. If `n` records exist, record `1` will be returned  for first invocation, then record `2`, ... record `n`. For invocations after the `n'`th invocation, record `n` will be returned.
+
+Note, if mode is not set, invocations of method will be unresolved and unrejected until a mode is set.
