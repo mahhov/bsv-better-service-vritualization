@@ -10,6 +10,8 @@ let customReplayDelays = {};
 let recordings = {};
 let replayHistory = {};
 
+let clone = obj => JSON.parse(JSON.stringify(obj));
+
 bsv.setModeIgnore = () => {
     modeResolve(modes.IGNORE);
 };
@@ -73,9 +75,9 @@ let recordPromise = (name, oldMethod, that, argumentList) => {
     let response = oldMethod.call(that, argumentList);
     let recordArguments = _.map(argumentList, argument => argument);
     response.then(resolution => {
-        recordings[name].push({'arguments': recordArguments, 'resolution': resolution, 'resolved': true});
+        recordings[name].push({'arguments': recordArguments, 'resolution': clone(resolution), 'resolved': true});
     }).catch(rejection => {
-        recordings[name].push({'arguments': recordArguments, 'rejection': rejection});
+        recordings[name].push({'arguments': recordArguments, 'rejection': clone(rejection)});
     });
     return response;
 };
@@ -118,7 +120,7 @@ let recordField = (name, object, field) => {
     if (!recordings[name])
         recordings[name] = {};
 
-    recordings[name][field] = object[field];
+    recordings[name][field] = clone(object[field]);
 };
 
 let replayField = (name, object, field) => {
