@@ -10,7 +10,7 @@ let customReplayDelays = {};
 let recordings = {};
 let replayHistory = {};
 
-let clone = obj => JSON.parse(JSON.stringify(obj));
+let clone = obj => obj === undefined ? undefined : JSON.parse(JSON.stringify(obj));
 
 bsv.setModeIgnore = () => {
     modeResolve(modes.IGNORE);
