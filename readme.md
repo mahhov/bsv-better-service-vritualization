@@ -107,7 +107,7 @@ The chrome extension tries to do most of the setup for you. For example, you wil
 a `.js` file is still required in order to register which methods and fields you want to record and replay. For example, for an angularjs app, that would look something like:
 
 ```
-angular.module('CSSRedesign.common').run(function (carRepository) {
+angular.module('MyModule').run(function (carRepository) {
     bsv.registerPromise('makes', myRepository, 'getMakes');
     bsv.registerPromise('models', myRepository, 'getModels');
     bsv.registerPromise('years', myRepository, 'getYears');
