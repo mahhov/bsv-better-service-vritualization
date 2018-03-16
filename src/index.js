@@ -73,7 +73,7 @@ let recordPromise = (name, oldMethod, that, argumentList) => {
         recordings[name] = [];
 
     let response = oldMethod.call(that, argumentList);
-    let recordArguments = _.map(argumentList, argument => argument);
+    let recordArguments = argumentList && argumentList.map(argument => argument);
     response.then(resolution => {
         recordings[name].push({'arguments': recordArguments, 'resolution': clone(resolution), 'resolved': true});
     }).catch(rejection => {
