@@ -5,11 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src -d lib",
-    "watch": "npm-watch",
-    "run-temp-test": "node spec/temp-test.js"
-  },
-  "watch": {
-    "run-temp-test": "{src,spec}/*.js"
+    "dev": "nodemon --watch src --watch spec --exec node spec/temp-test.js"
   },
   "author": "mahhov",
   "license": "ISC",
@@ -20,7 +16,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "npm-watch": "^0.3.0"
+    "nodemon": "^1.17.2"
   },
   "babel": {
     "presets": [
