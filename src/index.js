@@ -59,11 +59,11 @@ bsv.registerPromise = (name, object, method) => {
     object[method] = function () {
         return modePromise.then(mode => {
             if (mode === modes.RECORD)
-                return recordPromise(name, oldMethod, this, ...arguments);
+                return recordPromise(name, oldMethod, this, arguments);
             else if (mode === modes.REPLAY)
                 return replayPromise(name);
             else
-                return oldMethod.call(this, ...arguments);
+                return oldMethod.call(this, arguments);
         });
     };
 };
@@ -73,11 +73,10 @@ let recordPromise = (name, oldMethod, that, argumentList) => {
         recordings[name] = [];
 
     let response = oldMethod.call(that, argumentList);
-    let recordArguments = argumentList && argumentList.map(argument => argument);
     response.then(resolution => {
-        recordings[name].push({'arguments': recordArguments, 'resolution': clone(resolution), 'resolved': true});
+        recordings[name].push({'arguments': argumentList, 'resolution': clone(resolution), 'resolved': true});
     }).catch(rejection => {
-        recordings[name].push({'arguments': recordArguments, 'rejection': clone(rejection)});
+        recordings[name].push({'arguments': argumentList, 'rejection': clone(rejection)});
     });
     return response;
 };
