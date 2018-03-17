@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "babel src -d lib",
     "dev": "nodemon --watch src --watch spec --exec node spec/temp-test.js",
     "postversion": "git push && git push --tags && npm publish"
   },
@@ -15,13 +14,6 @@
     "url": "https://github.com/mahhov/bsv-better-service-vritualization"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
     "nodemon": "^1.17.2"
-  },
-  "babel": {
-    "presets": [
-      "env"
-    ]
   }
 }
